@@ -3,8 +3,8 @@ package ui;
 import model.Doctor;
 import model.Patient;
 
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class UIMenu {
 
