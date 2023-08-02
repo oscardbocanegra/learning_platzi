@@ -60,24 +60,26 @@
             text-align: center;
         }
 
-        .form{
+        .email-image{
+            width: 132px;
+            height: 132px;
+            border-radius: 50%;
+            background-color: var(--text-input-field);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .label{
-            font-size: var(--sm);
-            font-weight: bold;
-            margin-bottom: 4px;
+        .email-image img{
+            width: 80px;
         }
-        .input{
-            background-color: var(--text-input-field);
-            border: none;
-            border-radius: 8px;
-            height: 30px;
-            font-size: var(--md);
-            padding: 6px;
-            margin-bottom: 12px;
+
+        .resend{
+            font-size: var(--sm);
+        }
+
+        .resend span{
+            color: var(--very-light-pink);
         }
 
         .primary-button{
@@ -111,19 +113,22 @@
             <img src="./logos/logo_yard_sale.svg" alt="logo" class="logo">
 
 
-            <h1 class="title"> Create a new password</h1>
-            <p class="subtitle"> Enter a new password for your account </p>
-            <form action="/" class="form">
-                <label for="password" class="label">Password</label>
-                <input type="password" id="password" placeholder="***********" class="input unput-password">
+            <h1 class="title"> Email has been sent!</h1>
+            <p class="subtitle"> Please check your inbox for instructions on how to reset the password </p>
 
+            <div class="email-image">
+                <img src="icons/email.svg" alt="email">
+            </div>
 
-                <label for=" new-password" class="label">Password</label>
-                <input type="password" id="new-password" placeholder="***********" class="input unput-password">
+            <div>
+                <button class="primary-button login-button">Login</button>
 
-                <input type="submit" value="Confirm" class="primary-button login-button ">
+                <p>
+                    <span>Didn't recieve the email?</span>
+                    <a href="/">Resend</a>
+                </p>
 
-            </form>
+            </div>
         </div>
     </div>
 </body>
