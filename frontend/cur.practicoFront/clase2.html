@@ -36,6 +36,7 @@
             display: grid;
             grid-template-rows: auto 1fr auto;
             width: 300px;
+            justify-items: center;
         }
 
         .logo{
@@ -82,6 +83,11 @@
             color: var(--very-light-pink);
         }
 
+        .resend a {
+            color: var(--hospital-green);
+            text-decoration: none;
+        }
+
         .primary-button{
             background-color: var(--hospital-green);
             border-radius: 8px;
@@ -123,7 +129,7 @@
             <div>
                 <button class="primary-button login-button">Login</button>
 
-                <p>
+                <p class="resend">
                     <span>Didn't recieve the email?</span>
                     <a href="/">Resend</a>
                 </p>
