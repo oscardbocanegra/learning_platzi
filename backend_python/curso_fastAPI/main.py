@@ -47,3 +47,7 @@ def get_movie(id: int):
         if item ["id"] == id:
             return item
     return []
+
+@app.get('/prueba')
+def prueba():
+    return 'prueba'
