@@ -48,6 +48,6 @@ def get_movie(id: int):
             return item
     return []
 
-@app.get('/prueba')
-def prueba():
-    return 'prueba'
+@app.get('/movies/', tags=['movies'])
+def get_movies_by_category(category: str, year: int):
+    return category
