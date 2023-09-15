@@ -1,5 +1,5 @@
 # We will import the module of fastAPI
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
 
 #Now i'll create a varible that will contain a list of a movies in where each 
@@ -50,4 +50,36 @@ def get_movie(id: int):
 
 @app.get('/movies/', tags=['movies'])
 def get_movies_by_category(category: str, year: int):
-    return category
+    return [item for item in movies if item ['category'] == category ]
+
+#now I'll create the same structure but this time with the post
+@app.post('/movies', tags=['movies'])
+def create_movie(id: int = Body(), title: str= Body(), overview: str= Body(), year: int= Body(), rating: float= Body(), category: str= Body()):
+    movie.append({
+        "id":id,
+        "title":title,
+        "overview":overview,
+        "year":year,
+        "rating": rating,
+        "category":category
+    })
+    return movie
+
+#With 'put' method we can do modifications in my API
+@app.put('/movies/{id}', tags=['movies'])
+def update_movie(id: int, title: str = Body(), overview:str = Body(), year:int = Body(), rating: float = Body(), category: str = Body()):
+	for item in movie:
+		if item["id"] == id:
+			item['title'] = title,
+			item['overview'] = overview,
+			item['year'] = year,
+			item['rating'] = rating,
+			item['category'] = category
+			return movie
+
+@app.delete('/movies/{id}', tags=['movies'])
+def delete_movie(id: int):
+    for item in movie:
+        if item["id"] == id:
+            movie.remove(item)
+            return movie
