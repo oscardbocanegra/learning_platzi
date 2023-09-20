@@ -1,6 +1,8 @@
 # We will import the module of fastAPI
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+from typing import Optional
 
 #Now i'll create a varible that will contain a list of a movies in where each 
 #dictionary is going to have their own description 
@@ -30,6 +32,16 @@ movie = [
 app = FastAPI()
 #On the following code we will change the name on the /docs
 app.title = "Mi aplicacion con FastAPI"
+app.version = "0.0.1"
+
+class Movie(BaseModel):
+    id: Optional[int] = None
+    title: str
+    overview: str
+    year: int
+    rating: float
+    category: str
+    
 
 @app.get('/', tags=['Home'])
 def message():
@@ -54,27 +66,20 @@ def get_movies_by_category(category: str, year: int):
 
 #now I'll create the same structure but this time with the post
 @app.post('/movies', tags=['movies'])
-def create_movie(id: int = Body(), title: str= Body(), overview: str= Body(), year: int= Body(), rating: float= Body(), category: str= Body()):
-    movie.append({
-        "id":id,
-        "title":title,
-        "overview":overview,
-        "year":year,
-        "rating": rating,
-        "category":category
-    })
+def create_movie(movie:Movie):
+    movie.append(movie)
     return movie
 
 #With 'put' method we can do modifications in my API
 @app.put('/movies/{id}', tags=['movies'])
-def update_movie(id: int, title: str = Body(), overview:str = Body(), year:int = Body(), rating: float = Body(), category: str = Body()):
+def update_movie(id: int, movie: Movie):
 	for item in movie:
 		if item["id"] == id:
-			item['title'] = title,
-			item['overview'] = overview,
-			item['year'] = year,
-			item['rating'] = rating,
-			item['category'] = category
+			item['title'] = movie.title
+			item['overview'] = movie.overview
+			item['year'] = movie.year
+			item['rating'] = movie.rating
+			item['category'] = movie.category
 			return movie
 
 @app.delete('/movies/{id}', tags=['movies'])
