@@ -1,90 +1,89 @@
-# We will import the module of fastAPI
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
-#Now i'll create a varible that will contain a list of a movies in where each 
-#dictionary is going to have their own description 
-movie = [
-    {
-        "id": 1,
-        "title": "Avatar",
-        "overview":'Avatar derives from a Sanskrit word meaning "descent," and when it first appeared in English in the late 18th century, it referred to the descent of a deity to the earth—typically, the incarnation in earthly form of Vishnu or another Hindu deity.',
-        "year": "2009",
-        "rating": 7.4,
-        "category": "Action"
-    
-    },
-    {
-        "id": 2,
-        "title": "Avatar",
-        "overview":'Avatar derives from a Sanskrit word meaning "descent," and when it first appeared in English in the late 18th century, it referred to the descent of a deity to the earth—typically, the incarnation in earthly form of Vishnu or another Hindu deity.',
-        "year": "2009",
-        "rating": 7.4,
-        "category": "Action"
-    
-    }
-]
-
-
-#Now we will create an instance of FastAPI
 app = FastAPI()
-#On the following code we will change the name on the /docs
-app.title = "Mi aplicacion con FastAPI"
+app.title = "Mi aplicación con  FastAPI"
 app.version = "0.0.1"
 
 class Movie(BaseModel):
     id: Optional[int] = None
-    title: str
-    overview: str
-    year: int
-    rating: float
-    category: str
-    
+    title: str = Field(min_length=5, max_length=15)
+    overview: str = Field(min_length=15, max_length=50)
+    year: int = Field(le=2022)
+    rating:float = Field(default=10, ge=1, le=10)
+    category:str = Field(default='Categoría', min_length=5, max_length=15)
 
-@app.get('/', tags=['Home'])
+    class Config:
+        json_schema_extra = {  # Cambia 'schema_extra' a 'json_schema_extra'
+            "example": {
+                "id": 1,
+                "title": "Mi película",
+                "overview": "Descripción de la película",
+                "year": 2022,
+                "rating": 9.8,
+                "category": "Acción"
+            }
+        }
+
+movies = [
+    {
+		"id": 1,
+		"title": "Avatar",
+		"overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+		"year": "2009",
+		"rating": 7.8,
+		"category": "Acción"
+	},
+    {
+		"id": 2,
+		"title": "Avatar",
+		"overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+		"year": "2009",
+		"rating": 7.8,
+		"category": "Acción"
+	}
+]
+
+@app.get('/', tags=['home'])
 def message():
     return HTMLResponse('<h1>Hello world</h1>')
 
 @app.get('/movies', tags=['movies'])
-def movies():
-    return movie
+def get_movies():
+    return movies
 
-#So now I'll create another path but this time we are going to specificate 
-#that this will have a parameter, and i can do this with the "{}"
 @app.get('/movies/{id}', tags=['movies'])
 def get_movie(id: int):
-    for item in movie:
-        if item ["id"] == id:
+    for item in movies:
+        if item["id"] == id:
             return item
     return []
 
 @app.get('/movies/', tags=['movies'])
 def get_movies_by_category(category: str, year: int):
-    return [item for item in movies if item ['category'] == category ]
+    return [ item for item in movies if item['category'] == category ]
 
-#now I'll create the same structure but this time with the post
 @app.post('/movies', tags=['movies'])
-def create_movie(movie:Movie):
-    movie.append(movie)
-    return movie
+def create_movie(movie: Movie):
+    movies.append(movie)
+    return movies
 
-#With 'put' method we can do modifications in my API
 @app.put('/movies/{id}', tags=['movies'])
 def update_movie(id: int, movie: Movie):
-	for item in movie:
+	for item in movies:
 		if item["id"] == id:
 			item['title'] = movie.title
 			item['overview'] = movie.overview
 			item['year'] = movie.year
 			item['rating'] = movie.rating
 			item['category'] = movie.category
-			return movie
+			return movies
 
 @app.delete('/movies/{id}', tags=['movies'])
 def delete_movie(id: int):
-    for item in movie:
+    for item in movies:
         if item["id"] == id:
-            movie.remove(item)
-            return movie
+            movies.remove(item)
+            return movies
