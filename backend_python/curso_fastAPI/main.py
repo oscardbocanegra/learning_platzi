@@ -66,6 +66,10 @@ movies = [
 	}
 ]
 
+@app.get('/prueba')
+def prueba():
+    return HTMLResponse("Prueba ok")
+
 @app.get('/', tags=['home'])
 def message():
     return HTMLResponse('<h1>Hello world</h1>')
