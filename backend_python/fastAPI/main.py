@@ -1,28 +1,38 @@
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+from typing import Optional
 
 app = FastAPI()
 app.title = 'Learning FastAPI'
 
-movies = [
-    {
-        "id": 1,
-        "title": "Avatar",
-        "overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que...",
-        "year": "2009",
-        "rating": 7.8,
-        "category": "Acción"
-    },
-    {
-        "id": 2,
-        "title": "Avatar",
-        "overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que...",
-        "year": "2009",
-        "rating": 7.8,
-        "category": "Acción"
-    }
-]
 
+class Movie(BaseModel):
+    id: Optional[int] = None
+    title: str
+    overview: str
+    year: int
+    rating: float
+    category: str
+    
+movies = [
+        {
+		"id": 1,
+		"title": "Avatar",
+		"overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+		"year": "2009",
+		"rating": 7.8,
+		"category": "AcciÃ³n"
+	},
+    {
+		"id": 2,
+		"title": "Avatar",
+		"overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+		"year": "2009",
+		"rating": 7.8,
+		"category": "AcciÃ³n"
+	}
+]
 
 @app.get('/', tags=['home'])
 def message():
@@ -48,27 +58,20 @@ def get_movies_by_category(category: str, year: int):
 
 
 @app.post('/movies', tags=['movies'])
-def create_movie(id: int = Body(), title: str = Body(), overview:str = Body(), year:int = Body(), rating: float = Body(), category: str = Body()):
-    movies.append({
-        "id": id,
-        "title": title,
-        "overview": overview,
-        "year": year,
-        "rating": rating,
-        "category": category
-    })
+def create_movie(movie: Movie):
+    movies.append(movie)
     return movies
 
 
 @app.put('/movies/{id}', tags=['movies'])
-def update_movie(id: int, title: str = Body(), overview:str = Body(), year:int = Body(), rating: float = Body(), category: str = Body()):
+def update_movie(id: int, movie: Movie):
 	for item in movies:
 		if item["id"] == id:
-			item['title'] = title,
-			item['overview'] = overview,
-			item['year'] = year,
-			item['rating'] = rating,
-			item['category'] = category
+			item['title'] = movie.title
+			item['overview'] = movie.overview
+			item['year'] = movie.year
+			item['rating'] = movie.rating
+			item['category'] = movie.category
 			return movies
 
 
