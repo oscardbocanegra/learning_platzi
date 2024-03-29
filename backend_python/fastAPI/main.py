@@ -19,26 +19,6 @@ app.include_router(user_router)
 
 Base.metadata.create_all(bind=engine)
 
-
-
-class User(BaseModel):
-    email: str
-    password: str
-
-    
-    class Config:
-        schema_extra = {
-            "example": {
-                "id": 1,
-                "title": "Movie",
-                "overview": "Movie description",
-                "year": 2024,
-                "raiting": 9.8,
-                "category": "accion"
-            }
-        }
-    
-    
     
 movies = [
         {
