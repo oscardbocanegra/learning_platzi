@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
-from jwt_manager import create_token, validate_token
+from utils.jwt_manager import create_token, validate_token
 from config.database import Session, engine, Base
 from middlewares.error_handler import ErrorHandler
 from routers.movie import movie_router
