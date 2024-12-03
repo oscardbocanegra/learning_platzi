@@ -30,3 +30,9 @@ let frutas = ['Manzana', 'banano', "uvas"]
 
 // funciones
 function saludar(){}
+
+// Tipo de dato: string
+let string1 = 'Hola mundo,'
+let string2 = ' voy a por mi mustang'
+let string3 =  `${ string1 } ${string2}`
+console.log(string3)
