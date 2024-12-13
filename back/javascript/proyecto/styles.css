@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .game-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  canvas {
+    border: 1px solid #000;
+    margin: 20px auto;
+    display: block;
+  }
+  
+  #wordDisplay {
+    font-size: 24px;
+    letter-spacing: 10px;
+    margin: 20px 0;
+  }
+  
+  #message {
+    color: red;
+    font-weight: bold;
+  }
+  
+  input, button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  #resetButton {
+    margin-top: 20px;
+  }
+  
