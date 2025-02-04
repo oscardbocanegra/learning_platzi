@@ -1,5 +1,6 @@
 import unittest, os
-
+from unittest.mock import patch
+from src.exceptions import InsufficientFundsError, WithdrawalTimeRestrictionError
 from src.bank_account import BankAccount
 
 class BankAccountTests(unittest.TestCase):
@@ -11,64 +12,91 @@ class BankAccountTests(unittest.TestCase):
     setUp():
         Initializes a BankAccount instance with a balance of 1000 for use in tests.
     
-    test_deposit():
-        Tests that depositing 500 into the account increases the balance to 1500.
+    tearDown():
+        Removes the transaction log file if it exists after each test.
     
-    test_withdraw():
-        Tests that withdrawing 500 from the account decreases the balance to 500.
+    _count_lines(filename):
+        Helper method to count the number of lines in a file.
     
-    test_get_balance():
-        Tests that the get_balance method returns the correct balance of 1000.
+    test_deposit_increases_balance_by_deposit():
+        Tests that depositing an amount increases the account balance by that amount.
     
-    test_transaction():
+    test_deposit_logs_transaction():
         Tests that a transaction log file is created after a deposit.
     
-    test_count_transactions():
+    test_withdraw_logs_each_transaction():
         Tests that the number of lines in the transaction log file increases with each transaction.
+    
+    test_withdraw_raises_error_when_insufficient_funds():
+        Tests that an InsufficientFundsError is raised when attempting to withdraw more than the available balance.
+    
+    test_withdraw_during_bussines_hours():
+        Tests that withdrawing during business hours is allowed.
+    
+    test_withdraw_disallow_before_bussines_hours():
+        Tests that withdrawing before business hours raises a WithdrawalTimeRestrictionError.
+    
+    test_withdraw_disallow_after_bussines_hours():
+        Tests that withdrawing after business hours raises a WithdrawalTimeRestrictionError.
+    
+    test_deposit_multiple_amounts():
+        Tests multiple deposit amounts and verifies the expected balance after each deposit.
     """
     
-    def setUp(self):
-        self.account = BankAccount(balance=1000, log_file='transaction_log.txt')
+    def setUp(self) -> None:
+        self.account = BankAccount(balance=1000, log_file="transaction_log.txt")
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         if os.path.exists(self.account.log_file):
             os.remove(self.account.log_file)
 
-    def _count_lines(self, file):
-        with open(file, 'r') as f:
+    def _count_lines(self, filename):
+        with open(filename, "r") as f:
             return len(f.readlines())
-    
-    def test_deposit(self):
-        """
-        Tests that depositing 500 into the account increases the balance to 1500.
-        """
+
+    def test_deposit_increases_balance_by_deposit(self):
         new_balance = self.account.deposit(500)
-        self.assertEqual(new_balance, 1500, "El balance no es igual")
+        self.assertEqual(new_balance, 1500)
 
-    def test_withdraw(self):
-        """
-        Tests that withdrawing 500 from the account decreases the balance to 500.
-        """
-        new_balance = self.account.withdraw(500)
-        self.assertEqual(new_balance, 500, "El balance no es igual")
-
-    def test_get_balance(self):
-        """
-        Tests that the get_balance method returns the correct balance of 1000.
-        """
-        self.assertEqual(self.account.get_balance(), 1000, "El balance no es igual")
-
-    def test_transaction(self):
-        """
-        Tests that a transaction log file is created after a deposit.
-        """
+    def test_deposit_logs_transaction(self):
         self.account.deposit(500)
-        self.assertTrue(os.path.exists('transaction_log.txt'))
+        self.assertTrue(os.path.exists("transaction_log.txt"))
 
-    def test_count_transactions(self):
-        """
-        Tests that the number of lines in the transaction log file increases with each transaction.
-        """
-        assert self._count_lines('transaction_log.txt') == 1
+    def test_withdraw_logs_each_transaction(self):
+        self.assertEqual(self._count_lines(self.account.log_file), 1)
         self.account.deposit(500)
-        assert self._count_lines('transaction_log.txt') == 2
+        self.assertEqual(self._count_lines(self.account.log_file), 2)
+
+    def test_withdraw_raises_error_when_insufficient_funds(self):
+        with self.assertRaises(InsufficientFundsError):
+            self.account.withdraw(2000)
+
+    @patch("src.bank_account.datetime")
+    def test_withdraw_during_bussines_hours(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 8
+        new_balance = self.account.withdraw(100)
+        self.assertEqual(new_balance, 900)
+
+    @patch("src.bank_account.datetime")
+    def test_withdraw_disallow_before_bussines_hours(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 7
+        with self.assertRaises(WithdrawalTimeRestrictionError):
+            self.account.withdraw(100)
+
+    @patch("src.bank_account.datetime")
+    def test_withdraw_disallow_after_bussines_hours(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 18
+        with self.assertRaises(WithdrawalTimeRestrictionError):
+            self.account.withdraw(100)
+
+    def test_deposit_multiple_amounts(self):
+        test_cases = [
+            {"ammount": 100, "expected": 1100},
+            {"ammount": 3000, "expected": 4000},
+            {"ammount": 4500, "expected": 5500},
+        ]
+        for case in test_cases:
+            self.account = BankAccount(balance=1000, log_file="transactions.txt")
+            with self.subTest(case=case):
+                new_balance = self.account.deposit(case["ammount"])
+                self.assertEqual(new_balance, case["expected"])
