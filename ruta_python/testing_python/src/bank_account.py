@@ -20,6 +20,9 @@ class BankAccount:
     withdraw(amount):
         Withdraws a specified amount from the bank account if within business hours and sufficient funds are available.
     
+    get_balance():
+        Returns the current balance of the bank account.
+    
     _log_transaction(message):
         Logs a transaction message to the log file if logging is enabled.
     """
@@ -106,5 +109,13 @@ class BankAccount:
         return self.balance
 
     def get_balance(self):
+        """
+        Returns the current balance of the bank account.
+        
+        Returns
+        -------
+        float
+            The current balance of the bank account.
+        """
         self._log_transaction(f"Checked balance. Current balance: {self.balance}")
         return self.balance
