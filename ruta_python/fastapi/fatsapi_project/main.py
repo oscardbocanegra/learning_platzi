@@ -28,9 +28,19 @@ async def time(iso_code: str):
     tz = zoneinfo.ZoneInfo(timezone_str)
     return {"time": datetime.now(tz)}
 
+db_cosntumer: list[Customer] = []
+
 @app.post("/customers/", response_model=Customer)
 async def create_customer(customer_data: CustomerCreate):
-    return customer_data
+    customer = Customer.model_validate(customer_data.model_dump())
+    #Asuminedo que hace base de datos
+    customer.id = len(db_cosntumer)
+    db_cosntumer.append(customer)
+    return customer
+
+@app.get("/customers/", response_model=list[Customer])
+async def list_customers():
+    return db_cosntumer
 
 @app.post("/transactions/")
 async def create_transaction(transaction_data: Customer):
