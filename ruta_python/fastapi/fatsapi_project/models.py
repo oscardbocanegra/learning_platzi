@@ -1,30 +1,34 @@
 from pydantic import BaseModel
+from sqlmodel import SQLModel
 
 
-class CustomerBase(BaseModel):
+class CustomerBase(SQLModel):
     name: str
-    description: str | None = None
+    description: str | None
     email: str
     age: int
+
 
 class CustomerCreate(CustomerBase):
     pass
 
-class Customer(CustomerBase):
-    id: int | None = None
-    
 
-class Transaccion(BaseModel):
+class Customer(CustomerBase, table=True):
+    id: int | None = None
+
+
+class Transaction(BaseModel):
     id: int
-    amount: int
+    ammount: int
     description: str
 
-class Invoce(BaseModel):
+
+class Invoice(BaseModel):
     id: int
     customer: Customer
-    transaccion: list[Transaccion]
+    transactions: list[Transaction]
     total: int
 
     @property
     def ammount_total(self):
-        return sum([t.amount for t in self.transaccion])
+        return sum(transaction.ammount for transaction in self.transactions)
