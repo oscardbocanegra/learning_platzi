@@ -7,7 +7,7 @@ from sqlmodel import select
 from db import SessionDep, create_all_tables
 from models import Invoice, Transaction
 
-from routers import customers, transactions, plans
+from routers import customers, plans, transactions
 
 app = FastAPI(lifespan=create_all_tables)
 app.include_router(customers.router)
