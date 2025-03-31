@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 
 from doctors.models import Doctor
 from doctors.serializers import DoctorSerializer
