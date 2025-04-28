@@ -1,0 +1,10 @@
+name: cookiecutter-personal
+channels:
+  - conda-forge
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+  - https://repo.anaconda.com/pkgs/msys2
+dependencies:
+  - cookiecutter=1.7.3
+prefix: C:\Users\david\anaconda3\envs\cookiecutter-personal
