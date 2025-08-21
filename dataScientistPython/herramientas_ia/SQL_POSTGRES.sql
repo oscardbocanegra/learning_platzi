@@ -61,3 +61,5 @@ CREATE INDEX idx_orders_client_id ON Orders (client_id);
 -- agrega las columnas created_at a las tabla orders_detail
 ALTER TABLE Orders_Detail
 ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+--  
