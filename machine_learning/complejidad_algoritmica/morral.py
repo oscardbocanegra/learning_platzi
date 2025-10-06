@@ -1,6 +1,14 @@
 
 
 def morral(tamano_morral, pesos, valores, n):
+    """Función recursiva para resolver el problema del morral (knapsack problem)
+    Args:
+        tamano_morral (int): Capacidad máxima del morral
+        pesos (list): Lista de pesos de los objetos
+        valores (list): Lista de valores de los objetos
+        n (int): Número de objetos considerados
+        Returns:
+            int: Valor máximo que se puede obtener con la capacidad dada"""
     
     if n == 0 or tamano_morral == 0:
         return 0
