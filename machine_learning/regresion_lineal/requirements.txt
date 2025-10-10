@@ -1,0 +1,9 @@
+# Paquetes sugeridos para regresión lineal y experimentos de ML
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+jupyter
+
+# Instálalos con: pip install -r requirements.txt
