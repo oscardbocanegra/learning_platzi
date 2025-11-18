@@ -4,3 +4,5 @@ databasesLoadData.zip
 cifar100_labels.json
 /sign-language-img
 sign-language-img.zip
+/bad_images
+best_model.h5
